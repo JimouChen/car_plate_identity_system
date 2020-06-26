@@ -3,8 +3,7 @@
 # @Author  :  Jimou Chen
 """
 import cv2
-import numpy as np
-import tensorflow as tf
+from identity.tool_function import *
 
-car_plate_img = cv2.imread('./car_plate_photo/1.jpg', cv2.IMREAD_GRAYSCALE)
-print(car_plate_img)
+img = cv2.imread('./car_plate_photo/1.jpg', cv2.IMREAD_GRAYSCALE)
+show_img('123', img)
