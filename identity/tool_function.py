@@ -35,3 +35,11 @@ def gauss_img(img):
     new_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
     return new_img
     # return img
+
+
+# 假设一个车牌的长宽比在2.8:1到4：1之间，用该标准来判断是不是车牌轮廓
+def judge_plate(width, height):
+    if (width > (height * 2.8)) and (width < (4 * height)):
+        return True
+    else:
+        return False

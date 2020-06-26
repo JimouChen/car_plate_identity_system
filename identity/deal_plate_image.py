@@ -49,6 +49,25 @@ contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_
 print(hierarchy)
 # 绘制轮廓
 cv2.drawContours(img1, contours, -1, (0, 255, 0), 30)
-show_gray(img1)
+# show_gray(img1)
 
-    
+# 选出车牌的轮廓
+for con in contours:
+    # cv2.boundingRect用一个最小的矩形把找到的轮廓圈起来
+    # 返回值rectangle是个包含矩形左上角x,y坐标以及长宽的列表
+    rectangle = cv2.boundingRect(con)
+    x = rectangle[0]
+    y = rectangle[1]
+    width = rectangle[2]
+    height = rectangle[3]
+
+    print('x={},y={},w={},h={}'.format(x, y, width, height))
+
+    # 截取出符合车牌长宽要求的轮廓区域图片
+    if judge_plate(width, height):
+        car_plate = img1[y:y + height, x:x + width]  # 截取出车牌轮廓
+        show_gray(car_plate)
+        print('截取成功')
+    else:
+        print('截取失败')
+
