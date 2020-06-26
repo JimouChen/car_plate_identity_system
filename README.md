@@ -9,4 +9,5 @@ import cv2, pytesseract ... and so on
     记得使用：
     `pytesseract.pytesseract.tesseract_cmd = r'...\tesseract.exe'`
     
-
+注意事项：
+    lang字符串-Tesseract语言代码字符串。如果未指定，则默认为eng！多种语言的示例：lang ='eng + fra'
