@@ -46,7 +46,7 @@ img = cv2.medianBlur(img, 15)
 # cv2.RETR_EXTERNAL表示只检测外轮廓
 # cv2.CHAIN_APPROX_SIMPLE压缩水平方向，垂直方向，对角线方向的元素，只保留该方向的终点坐标，例如一个矩形轮廓只需4个点来保存轮廓信息
 contours, hierarchy = cv2.findContours(img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-print(hierarchy)
+# print(hierarchy)
 # 绘制轮廓
 cv2.drawContours(img1, contours, -1, (0, 255, 0), 30)
 # show_gray(img1)
@@ -61,13 +61,13 @@ for con in contours:
     width = rectangle[2]
     height = rectangle[3]
 
-    print('x={},y={},w={},h={}'.format(x, y, width, height))
+    # print('x={},y={},w={},h={}'.format(x, y, width, height))
 
     # 截取出符合车牌长宽要求的轮廓区域图片
     if judge_plate(width, height):
         car_plate = img1[y:y + height, x:x + width]  # 截取出车牌轮廓
         show_gray(car_plate)
         print('截取成功')
-    else:
-        print('截取失败')
+        identity_massage(car_plate)
+        break
 

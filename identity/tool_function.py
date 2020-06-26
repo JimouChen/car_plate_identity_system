@@ -43,3 +43,14 @@ def judge_plate(width, height):
         return True
     else:
         return False
+
+
+# 使用Tesseract进行识别
+def identity_massage(car_plate):
+    import pytesseract
+    pytesseract.pytesseract.tesseract_cmd = r'D:\Appication\PyCharm\tesseract\tesseract.exe'
+    # 识别图片文字
+    #  code = pytesseract.image_to_string(car_plate, lang='eng+chi_sim+chi_sim_vert+chi_tra+chi_tra_vert')
+    # code = pytesseract.image_to_string(car_plate)
+    code = pytesseract.image_to_boxes(car_plate, lang='chi_sim')
+    print(code)
