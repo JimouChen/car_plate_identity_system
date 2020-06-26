@@ -21,8 +21,7 @@ ret, img = cv2.threshold(img, 0, 255, cv2.THRESH_OTSU)
 # show_gray(img)
 
 # 闭运算,把白色部分练成整体
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 10))  # 把x方向的膨胀设为20，y的设为15
-print(kernel)
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (20, 10))  # 把x方向的膨胀设为20，y的设为10
 img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel, iterations=4)  # 迭代次数设到合适
 # show_gray(img)
 
@@ -68,6 +67,6 @@ for con in contours:
         car_plate = img1[y:y + height, x:x + width]  # 截取出车牌轮廓
         show_gray(car_plate)
         print('截取成功')
-        identity_massage(car_plate)
+        text_extract(car_plate)
         break
 
