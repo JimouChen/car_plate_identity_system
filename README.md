@@ -11,3 +11,5 @@ import cv2, pytesseract ... and so on
     
 注意事项：
     lang字符串-Tesseract语言代码字符串。如果未指定，则默认为eng！多种语言的示例：lang ='eng + fra'
+    
+把车牌找到后，我对每个字符进行一一使用Tesseract识别，发现效果不好，所以打算使用大量图片的匹配算法来实现识别。
