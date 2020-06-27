@@ -13,3 +13,4 @@ import cv2, pytesseract ... and so on
     lang字符串-Tesseract语言代码字符串。如果未指定，则默认为eng！多种语言的示例：lang ='eng + fra'
     
 把车牌找到后，我对每个字符进行一一使用Tesseract识别，发现效果不好，所以打算使用大量图片的匹配算法来实现识别。
+**最后决定使用opencv自带的模板匹配函数进行识别，结果测试发现这样的正确率较高。**
