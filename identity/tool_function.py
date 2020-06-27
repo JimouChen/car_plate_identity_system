@@ -2,6 +2,7 @@
 # @Time    :  2020/6/26
 # @Author  :  Jimou Chen
 """
+import os
 import cv2
 import matplotlib.pyplot as plt
 
@@ -59,9 +60,9 @@ def identity_massage(car_plate):
     pytesseract.pytesseract.tesseract_cmd = r'D:\Appication\PyCharm\tesseract\tesseract.exe'
     # 识别图片文字
     # code = pytesseract.image_to_string(car_plate, lang='eng+chi_sim+chi_sim_vert+chi_tra+chi_tra_vert')
-    code = pytesseract.image_to_string(car_plate)
-    #  code = pytesseract.image_to_boxes(car_plate, lang='chi_sim')
-    print(code)
+    #  code = pytesseract.image_to_string(car_plate)
+    code = pytesseract.image_to_boxes(car_plate, lang='eng')
+    print('code is ', code)
 
 
 # 提取车牌中的信息
@@ -118,12 +119,24 @@ def text_extract(car_plate):
 
     # 确保轮廓字符是按左到右的顺序排序的
     text = sorted(text, key=lambda l: l[0], reverse=False)
-    print('text :\n', text)
+    # print('text :\n', text)
 
-    count = 0
+    plate_img = []
     for word in text:
         if judge_word(word[2], word[3]):
-            count += 1
             # 把每个字单独截取出来
             word_img = origin_plate[word[1]:word[1] + word[3], word[0]:word[0] + word[2]]
             show_gray(word_img)
+            plate_img.append(word_img)  # 保存每个字
+
+    return plate_img
+
+
+# 读取一个文件夹下的所有图片，输入参数是文件名
+def read_directory(directory_name):
+    refer_img = []
+    # 为了匹配图片，拿出需要匹配的图片模板
+    for filename in os.listdir(directory_name):
+        refer_img.append(directory_name + "/" + filename)
+
+    return refer_img

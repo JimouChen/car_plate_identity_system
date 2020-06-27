@@ -67,6 +67,11 @@ for con in contours:
         car_plate = img1[y:y + height, x:x + width]  # 截取出车牌轮廓
         show_gray(car_plate)
         print('截取成功')
-        text_extract(car_plate)
+        # 将每个字提取出来,放到列表里
+        word_img = text_extract(car_plate)
+        for i in range(1, len(word_img)+1):
+            cv2.imwrite('./every_word/' + str(i) + '.png', word_img[i-1])
         break
+
+
 
