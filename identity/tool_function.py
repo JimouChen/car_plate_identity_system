@@ -49,7 +49,7 @@ def gauss_img(img):
 
 # 假设一个车牌的长宽比在2.8:1到4：1之间，用该标准来判断是不是车牌轮廓
 def judge_plate(width, height):
-    if (width > (height * 2.8)) and (width < (4 * height)):
+    if (width > (height * 2.8)) and (width < (4.5 * height)):
         return True
     else:
         return False
@@ -61,17 +61,6 @@ def judge_word(width, height):
         return True
     else:
         return False
-
-
-# 使用Tesseract进行识别
-def identity_massage(car_plate):
-    import pytesseract
-    pytesseract.pytesseract.tesseract_cmd = r'D:\Appication\PyCharm\tesseract\tesseract.exe'
-    # 识别图片文字
-    # code = pytesseract.image_to_string(car_plate, lang='eng+chi_sim+chi_sim_vert+chi_tra+chi_tra_vert')
-    #  code = pytesseract.image_to_string(car_plate)
-    code = pytesseract.image_to_boxes(car_plate, lang='eng')
-    print('code is ', code)
 
 
 # 提取车牌中的信息
@@ -102,7 +91,7 @@ def text_extract(car_plate):
     # 使白色字膨胀
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 4))  # 调整x，y，让单独一个字连在一起
     car_plate = cv2.dilate(car_plate, kernel)
-    # show_gray(car_plate)
+    show_gray(car_plate)
 
     # 轮廓检测
     # cv2.RETR_EXTERNAL表示只检测外轮廓
@@ -151,11 +140,20 @@ def read_directory(directory_name):
     return refer_img
 
 
+# 所有模板，但是效率低
+def get_all_words_list():
+    all_words = []
+    for i in range(0, 64):
+        word = read_directory('./refer_img/' + keywords[i])
+        all_words.append(word)
+    return all_words
+
+
 # 中文模板列表（只匹配车牌的第一个字符）
 def get_chinese_words_list():
     chinese_words = []
     for i in range(34, 64):
-        c_word = read_directory('./refer_img/' + keywords[i])
+        c_word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
         chinese_words.append(c_word)
     return chinese_words
 
@@ -164,7 +162,7 @@ def get_chinese_words_list():
 def get_eng_words_list():
     eng_words = []
     for i in range(10, 34):
-        e_word = read_directory('./refer_img/' + keywords[i])
+        e_word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
         eng_words.append(e_word)
     return eng_words
 
@@ -173,7 +171,7 @@ def get_eng_words_list():
 def get_eng_num_words_list():
     eng_num_words = []
     for i in range(0, 34):
-        word = read_directory('./refer_img/' + keywords[i])
+        word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
         eng_num_words.append(word)
     return eng_num_words
 
