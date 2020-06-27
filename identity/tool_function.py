@@ -5,6 +5,15 @@
 import os
 import cv2
 import matplotlib.pyplot as plt
+import numpy as np
+
+# 定义要匹配的关键字，根据实际情况，去掉O和I
+keywords = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M',
+            'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+            '藏', '川', '鄂', '甘', '赣', '贵', '桂', '黑', '沪', '吉', '冀',
+            '津', '晋', '京', '辽', '鲁', '蒙', '闽', '宁', '青', '琼', '陕',
+            '苏', '皖', '湘', '新', '渝', '豫', '粤', '云', '浙']
 
 
 # 显示图片
@@ -126,7 +135,7 @@ def text_extract(car_plate):
         if judge_word(word[2], word[3]):
             # 把每个字单独截取出来
             word_img = origin_plate[word[1]:word[1] + word[3], word[0]:word[0] + word[2]]
-            show_gray(word_img)
+            # show_gray(word_img)
             plate_img.append(word_img)  # 保存每个字
 
     return plate_img
@@ -140,3 +149,49 @@ def read_directory(directory_name):
         refer_img.append(directory_name + "/" + filename)
 
     return refer_img
+
+
+# 中文模板列表（只匹配车牌的第一个字符）
+def get_chinese_words_list():
+    chinese_words = []
+    for i in range(34, 64):
+        c_word = read_directory('./refer_img/' + keywords[i])
+        chinese_words.append(c_word)
+    return chinese_words
+
+
+# 英文模板列表（只匹配车牌的第二个字符）
+def get_eng_words_list():
+    eng_words = []
+    for i in range(10, 34):
+        e_word = read_directory('./refer_img/' + keywords[i])
+        eng_words.append(e_word)
+    return eng_words
+
+
+# 英文和数字模板列表（匹配车牌后面的字符）
+def get_eng_num_words_list():
+    eng_num_words = []
+    for i in range(0, 34):
+        word = read_directory('./refer_img/' + keywords[i])
+        eng_num_words.append(word)
+    return eng_num_words
+
+
+# 读取一个模板与图片进行匹配，返回相关性得分，越大效果越好
+def template_score(template_word, origin_img):
+    # fromfile()函数读回数据时需要用户指定元素类型，并对数组的形状进行适当的修改
+    template_img = cv2.imdecode(np.fromfile(template_word, dtype=np.uint8), 1)
+
+    # 对读进来的模板图片进行处理
+    template_img = gauss_img(template_img)  # 高斯去噪，灰度处理
+    ret, template_img = cv2.threshold(template_img, 0, 255, cv2.THRESH_OTSU)  # 自适应阈值处理
+    img = origin_img.copy()
+
+    # 不能直接匹配，要使两张图片具有相同的尺寸
+    height, width = img.shape
+    template_img = cv2.resize(template_img, (width, height))  # 把图片尺寸设成一样的
+
+    # 调用模板匹配函数matchTemplate，用cv2.TM_CCOEFF的算法进行匹配，返回值越大，表示越相关
+    result = cv2.matchTemplate(img, template_img, cv2.TM_CCOEFF)
+    return result[0][0]

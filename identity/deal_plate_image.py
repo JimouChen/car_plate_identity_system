@@ -69,9 +69,12 @@ for con in contours:
         print('截取成功')
         # 将每个字提取出来,放到列表里
         word_img = text_extract(car_plate)
-        for i in range(1, len(word_img)+1):
-            cv2.imwrite('./every_word/' + str(i) + '.png', word_img[i-1])
-        break
+        for i in range(1, len(word_img) + 1):
+            cv2.imwrite('./every_word/' + str(i) + '.png', word_img[i - 1]) # 保存
 
+        # to_be_matched = word_img.copy()
+        # result = template_matching(to_be_matched)
+        # print(result)
+        break
 
 
