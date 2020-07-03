@@ -4,6 +4,7 @@
 """
 import identity.deal_plate_image
 from identity.tool_function import *
+from tkinter import *
 
 # 按照车牌结构，第一位是中文，第二位是英文，后面的是英文和数字混合
 chinese_words = get_chinese_words_list()
@@ -35,12 +36,6 @@ def template_words(word_image, word_type, start_index):
     results.append(res)
 
 
-# 先匹配第一个中文，读取一个车牌的中文字符
-# c_img = cv2.imread('./every_word/1.png')
-# c_img = gauss_img(c_img)
-# template_words(c_img, chinese_words, 34)
-# print(results)
-
 # 得到字符的个数，有的车牌是7个，有的是8个
 count_list = read_directory('./every_word')
 count_words = len(count_list)
@@ -59,3 +54,7 @@ for i in range(1, count_words + 1):
         break
 
 print(results)
+
+res = str(results)
+# 最后显示识别结果的界面
+show_result(res)

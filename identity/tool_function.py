@@ -6,6 +6,7 @@ import os
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
+from tkinter import *
 
 # 定义要匹配的关键字，根据实际情况，去掉O和I
 keywords = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
@@ -69,7 +70,7 @@ def text_extract(car_plate):
     car_plate = gauss_img(car_plate)
     # 自适应阈值处理
     ret, car_plate = cv2.threshold(car_plate, 0, 255, cv2.THRESH_OTSU)
-    show_gray(car_plate)
+    # show_gray(car_plate)
     # identity_massage(car_plate)
     # 计算二值图像黑白点的个数，处理其他车牌颜色的问题，让车牌号码始终为白色
     white_area = 0
@@ -91,7 +92,7 @@ def text_extract(car_plate):
     # 使白色字膨胀
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 4))  # 调整x，y，让单独一个字连在一起
     car_plate = cv2.dilate(car_plate, kernel)
-    show_gray(car_plate)
+    # show_gray(car_plate)
 
     # 轮廓检测
     # cv2.RETR_EXTERNAL表示只检测外轮廓
@@ -193,3 +194,31 @@ def template_score(template_word, origin_img):
     # 调用模板匹配函数matchTemplate，用cv2.TM_CCOEFF的算法进行匹配，返回值越大，表示越相关
     result = cv2.matchTemplate(img, template_img, cv2.TM_CCOEFF)
     return result[0][0]
+
+
+# 最后显示识别结果的界面
+def show_result(str_res):
+    root_ = Tk()
+
+    frame1_ = Frame(root_)
+    frame2_ = Frame(root_)
+    frame3_ = Frame(root_)
+
+    var = StringVar()
+    var.set(str_res)
+
+    # img = PhotoImage(file='./car_plate.png')
+
+    # Label(frame1_, image=img).grid(row=1, column=1, sticky=W, padx=50, pady=30)
+    # Label(frame2_, textvariable=var).grid(row=2, column=3, sticky=E, padx=50, pady=50)
+
+    # Button(frame2, text='点击启动', command=callback2).grid(row=2, column=0, sticky=E, padx=50, pady=50)
+    Button(frame2_, text='退出系统', width=10, command=root_.quit).grid(row=2, column=1, sticky=W, padx=50, pady=50)
+    Button(frame2_, text='结果如右所示', width=20).grid(row=2, column=2, sticky=E, padx=50, pady=50)
+    Button(frame2_, text=str_res, width=50).grid(row=2, column=3, sticky=E, padx=50, pady=50)
+
+    frame1_.pack(padx=100, pady=50)
+    frame2_.pack(padx=50, pady=50)
+    frame3_.pack(padx=10, pady=10)
+
+    mainloop()
