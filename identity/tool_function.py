@@ -48,7 +48,7 @@ def gauss_img(img):
     # return img
 
 
-# 假设一个车牌的长宽比在2.8:1到4：1之间，用该标准来判断是不是车牌轮廓
+# 假设一个车牌的长宽比在2.8:1到4.5：1之间，用该标准来判断是不是车牌轮廓
 def judge_plate(width, height):
     if (width > (height * 2.8)) and (width < (4.5 * height)):
         return True
@@ -71,7 +71,6 @@ def text_extract(car_plate):
     # 自适应阈值处理
     ret, car_plate = cv2.threshold(car_plate, 0, 255, cv2.THRESH_OTSU)
     # show_gray(car_plate)
-    # identity_massage(car_plate)
     # 计算二值图像黑白点的个数，处理其他车牌颜色的问题，让车牌号码始终为白色
     white_area = 0
     black_area = 0
@@ -96,7 +95,7 @@ def text_extract(car_plate):
 
     # 轮廓检测
     # cv2.RETR_EXTERNAL表示只检测外轮廓
-    # cv2.CHAIN_APPROX_SIMPLE压缩水平方向，垂直方向，对角线方向的元素，只保留该方向的终点坐标，例如一个矩形轮廓只需4个点来保存轮廓信息
+    # cv2.CHAIN_APPROX_SIMPLE压缩水平方向，垂直方向，对角线方向的元素，只保留该方向的终点坐标
     contours, hierarchy = cv2.findContours(car_plate, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # 绘制轮廓
     car_plate = origin_plate.copy()
@@ -141,20 +140,21 @@ def read_directory(directory_name):
     return refer_img
 
 
-# 所有模板，但是效率低
-def get_all_words_list():
-    all_words = []
-    for i in range(0, 64):
-        word = read_directory('./refer_img/' + keywords[i])
-        all_words.append(word)
-    return all_words
+# 所有模板
+# def get_all_words_list():
+#     all_words = []
+#     for i in range(0, 64):
+#         word = read_directory('./refer_img/' + keywords[i])
+#         all_words.append(word)
+#     return all_words
 
 
 # 中文模板列表（只匹配车牌的第一个字符）
 def get_chinese_words_list():
     chinese_words = []
     for i in range(34, 64):
-        c_word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
+        #  c_word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
+        c_word = read_directory('./refer/' + keywords[i])
         chinese_words.append(c_word)
     return chinese_words
 
@@ -163,7 +163,8 @@ def get_chinese_words_list():
 def get_eng_words_list():
     eng_words = []
     for i in range(10, 34):
-        e_word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
+        # e_word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
+        e_word = read_directory('./refer/' + keywords[i])
         eng_words.append(e_word)
     return eng_words
 
@@ -172,7 +173,8 @@ def get_eng_words_list():
 def get_eng_num_words_list():
     eng_num_words = []
     for i in range(0, 34):
-        word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
+        # word = read_directory('D:\\Appication\\data\\DIPtestdata\\refer\\' + keywords[i])
+        word = read_directory('./refer/' + keywords[i])
         eng_num_words.append(word)
     return eng_num_words
 
@@ -199,6 +201,7 @@ def template_score(template_word, origin_img):
 # 最后显示识别结果的界面
 def show_result(str_res):
     root_ = Tk()
+    root_.title('识别结果')
 
     frame1_ = Frame(root_)
     frame2_ = Frame(root_)
@@ -208,11 +211,8 @@ def show_result(str_res):
     var.set(str_res)
 
     # img = PhotoImage(file='./car_plate.png')
-
     # Label(frame1_, image=img).grid(row=1, column=1, sticky=W, padx=50, pady=30)
-    # Label(frame2_, textvariable=var).grid(row=2, column=3, sticky=E, padx=50, pady=50)
 
-    # Button(frame2, text='点击启动', command=callback2).grid(row=2, column=0, sticky=E, padx=50, pady=50)
     Button(frame2_, text='退出系统', width=10, command=root_.quit).grid(row=2, column=1, sticky=W, padx=50, pady=50)
     Button(frame2_, text='结果如右所示', width=20).grid(row=2, column=2, sticky=E, padx=50, pady=50)
     Button(frame2_, text=str_res, width=50).grid(row=2, column=3, sticky=E, padx=50, pady=50)
