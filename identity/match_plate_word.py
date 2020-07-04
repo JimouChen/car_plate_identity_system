@@ -10,7 +10,7 @@ from tkinter import *
 chinese_words = get_chinese_words_list()
 eng_words = get_eng_words_list()
 eng_num_words = get_eng_num_words_list()
-all_words = get_all_words_list()
+# all_words = get_all_words_list()
 
 results = []
 
@@ -29,8 +29,7 @@ def template_words(word_image, word_type, start_index):
             score.append(result)
         best_score.append(max(score))  # 匹配到效果最好的所在下标
     best_index = best_score.index(max(best_score))
-    # if min(best_score) <= 0:
-    #     return
+
     res = keywords[start_index + best_index]
     print('识别结果为：------', res)
     results.append(res)
