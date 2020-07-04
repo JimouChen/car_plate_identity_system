@@ -2,13 +2,12 @@
 # @Time    :  2020/6/26
 # @Author  :  Jimou Chen
 """
-import cv2
 from identity.tool_function import *
 import identity.GUI as UI
 
 # 从界面获取要识别的图片
 pic_num = UI.e1.get()
-img = cv2.imread('./car_plate_photo/'+pic_num+'.jpg')
+img = cv2.imread('./car_plate_photo/'+pic_num)
 
 # img = cv2.imread('./car_plate_photo/2.jpg')
 # img = cv2.imread('./car_plate_photo/9.jpg')
@@ -27,7 +26,7 @@ show_gray(img)
 
 # 形态学处理
 # 闭运算,把白色部分练成整体
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (18, 5))  # 把x方向的膨胀设为20，y的设为10
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (18, 5))         # 把x方向的膨胀设为20，y的设为10
 img = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel, iterations=4)  # 迭代次数设到合适
 show_gray(img)
 # 去除一些小的白点
